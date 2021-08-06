@@ -1,3 +1,5 @@
+# Hello Maven
+
 ## JFrog Artifactory Configuration
 1. Create the following project
     - Project Name: hello
@@ -25,8 +27,7 @@
 3. Go to "[hello-]maven" -> Set Me Up -> Type password -> Click "Configure" tab -> Fill all entries (Releases, Snapshots, Plugin Releases, Plugin Snapshots) with "[hello-]maven" -> "Generate Settings" -> Download Snippet (settings.xml)
 4. Go to "[hello-]maven" -> Set Me Up -> Type password -> Click "Deploy" tab -> Copy a snippet to pom.xml
 
-# Hello Maven
-First change configuration
+## Local Configuration
 ```
 $ vi pom.xml
 <....>
