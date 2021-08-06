@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.5</version>
+    <version>2.5.3</version>
     <relativePath/>
     <!-- lookup parent from repository -->
   </parent>
@@ -16,6 +16,7 @@
   <description>Demo project for Spring Boot with Maven</description>
   <properties>
     <java.version>11</java.version>
+    <artifactory.url>platform.prod.tsuyo.org</artifactory.url>
   </properties>
   <dependencies>
     <dependency>
@@ -67,7 +68,7 @@
           </execution>
         </executions>
         <configuration>
-          <repository>platform.tsuyo.org/hello-docker/hello</repository>
+          <repository>${artifactory.url}/hello-docker/hello</repository>
           <!-- <tag>${project.version}</tag> -->
           <buildArgs>
             <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
@@ -92,15 +93,15 @@
 
   <distributionManagement>
     <repository>
-      <id>central</id>
-      <name>artifactory-ha-artifactory-ha-member-0-releases</name>
-      <url>https://platform.tsuyo.org/artifactory/hello-maven</url>
+        <id>central</id>
+        <name>artifactory-ha-artifactory-ha-member-0-releases</name>
+        <url>https://${artifactory.url}/artifactory/hello-maven</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
-      <name>artifactory-ha-artifactory-ha-member-0-snapshots</name>
-      <url>https://platform.tsuyo.org/artifactory/hello-maven</url>
+        <id>snapshots</id>
+        <name>artifactory-ha-artifactory-ha-member-0-snapshots</name>
+        <url>https://${artifactory.url}/artifactory/hello-maven</url>
     </snapshotRepository>
-  </distributionManagement>
+</distributionManagement>
 
 </project>
