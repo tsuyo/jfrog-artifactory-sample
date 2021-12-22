@@ -1,0 +1,10 @@
+version: 1
+type: maven
+resolver:
+  serverId: dev.gcp
+  snapshotRepo: hello-maven
+  releaseRepo: hello-maven
+deployer:
+  serverId: dev.gcp
+  snapshotRepo: hello-maven
+  releaseRepo: hello-maven

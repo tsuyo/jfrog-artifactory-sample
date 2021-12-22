@@ -1,50 +1,67 @@
 # Hello Maven
 
-## JFrog Artifactory Configuration
-1. Create the following project
-    - Project Name: hello
-    - Project Key: hello
-2. Create the following repos/registries under the project above
-    - Local Repository
-      - Repository Key: Maven -> [hello-]maven-local
-        - Enable Indexing In Xray
-      - Repository Key: Docker -> [hello-]docker-local
-        - Enable Indexing In Xray
-    - Remote Repository
-      - Repository Key: Maven -> [hello-]maven-remote
-        - URL: https://repo1.maven.org/maven2/ (default)
-        - Enable Indexing In Xray
-      - Repository Key: Docker -> [hello-]docker-remote
-        - URL: https://registry-1.docker.io/(default)
-        - Enable Indexing In Xray
-    - Virtual Repository
-      - Repository Key: Maven -> [hello-]maven
-        - Repositories: [hello-]maven-local, [hello-]maven-remote
-        - Default Deployment Repository: [hello-]maven-local
-      - Repository Key: Docker -> [hello-]docker
-        - Repositories: [hello-]docker-local, [hello-]docker-remote
-        - Default Deployment Repository: [hello-]docker-local
-3. Go to "[hello-]maven" -> Set Me Up -> Type password -> Click "Configure" tab -> Fill all entries (Releases, Snapshots, Plugin Releases, Plugin Snapshots) with "[hello-]maven" -> "Generate Settings" -> Download Snippet (settings.xml)
-4. Go to "[hello-]maven" -> Set Me Up -> Type password -> Click "Deploy" tab -> Copy a snippet to pom.xml
+## JFrog CLI Configuration
+```
+$ jfrog c add
+Server ID: dev.gcp
+JFrog platform URL: https://platform.dev.gcp.tsuyo.org          
+JFrog access token (Leave blank for username and password/API key): 
+JFrog username: admin
+JFrog password or API key: 
+Is the Artifactory reverse proxy configured to accept a client certificate? (y/n) [n]? 
+```
 
-## Local Configuration
+## JFrog Artifactory Configuration
+Create a project & repos under the project
 ```
-$ vi pom.xml
-<....>
- <properties>
-    <java.version>11</java.version>
-    <artifactory.url>platform.prod.tsuyo.org</artifactory.url> # use your artifactory url
-  </properties>
-$ vi Dockerfile
-FROM platform.prod.tsuyo.org/hello-docker/openjdk:17-jdk-alpine # use your artifactory url
+$ cd maven/artifactory
+$ ./repo_create.sh
+server id [prod, repo21, dev.gcp]: dev.gcp
+token: 
+project: hello
+create project
+{
+  "display_name" : "hello",
+  "admin_privileges" : {
+    "manage_members" : true,
+    "manage_resources" : true,
+    "index_resources" : true
+  },
+  "storage_quota_bytes" : -1,
+  "soft_limit" : false,
+  "storage_quota_email_notification" : true,
+  "project_key" : "hello"
+}
+create repos
+Successfully created repository 'hello-maven-local' 
+Successfully created repository 'hello-maven-remote' 
+Successfully created repository 'hello-maven'
 ```
-A Hello World App in Docker built with Maven
+Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
 ```
-$ docker login platform.prod.tsuyo.org # use your artifactory url
-$ ./mvnw -s settings.xml deploy
+$ cd ..
+$ jfrog mvnc
+Resolve dependencies from Artifactory? (y/n) [y]? 
+Set Artifactory server ID [repo21]: dev.gcp
+Set resolution repository for release dependencies (press Tab for options): hello-maven
+Set resolution repository for snapshot dependencies (press Tab for options): hello-maven
+Deploy project artifacts to Artifactory? (y/n) [y]? 
+Set Artifactory server ID [repo21]: dev.gcp
+Set repository for release artifacts deployment (press Tab for options): hello-maven
+Set repository for snapshot artifacts deployment (press Tab for options): hello-maven
+Would you like to filter out some of the deployed artifacts? (y/n) [n]? 
+[Info] maven build config successfully created.
+$ jfrog c use dev.gcp
 ```
-or complete version
+
+## Build and Deploy
 ```
-$ docker login platform.prod.tsuyo.org # use your artifactory url
-$ ./mvnw -s settings.xml -U dependency:purge-local-repository clean deploy
+$ jfrog mvn clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
+$ jfrog rt bce --project=hello hello-maven-manual-build 1
+$ jfrog rt bag --project=hello hello-maven-manual-build 1 ..
+$ jfrog rt bp --project=hello hello-maven-manual-build 1
+```
+To completely delete local caches as well, use the following command instead
+```
+$ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
 ```

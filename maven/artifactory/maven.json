@@ -1,0 +1,7 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "virtual",
+  "packageType": "maven",
+  "repositories": ["_PROJECT-maven-local", "_PROJECT-maven-remote"],
+  "defaultDeploymentRepo": "_PROJECT-maven-local"
+}
