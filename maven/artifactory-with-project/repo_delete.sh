@@ -14,3 +14,6 @@ jfrog rt rdel --quiet ${project}-maven-remote
 
 echo "delete project"
 curl -H "Authorization: Bearer ${token}" -X DELETE "${url}/access/api/v1/projects/${project}"
+
+echo "delete build-info repo"
+jfrog rt rdel --quiet ${project}-build-info
