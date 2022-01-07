@@ -1,0 +1,5 @@
+{
+  "rclass" : "local",
+  "packageType": "maven",
+  "xrayIndex" : true
+}

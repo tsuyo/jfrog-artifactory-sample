@@ -12,12 +12,13 @@ Is the Artifactory reverse proxy configured to accept a client certificate? (y/n
 ```
 
 ## JFrog Artifactory Configuration
+### With Projects
 Create a project & repos under the project
 ```
-$ cd maven/artifactory
-$ ./repo_create.sh
-server id [prod, repo21, dev.gcp]: dev.gcp
-token: 
+$ cd maven/artifactory-with-project
+server id [prod, repo21, tolucky.jfrog.io, dev.gcp]: dev.gcp
+user: admin
+token:
 project: hello
 create project
 {
@@ -33,10 +34,26 @@ create project
   "project_key" : "hello"
 }
 create repos
+Successfully created repository 'hello-maven-local'
+Successfully created repository 'hello-maven-remote'
+Successfully created repository 'hello-maven'
+```
+
+### Without Projects
+Create repos
+```
+$ cd maven/artifactory-without-project
+$ ./repo_create.sh
+server id [prod, repo21, dev.gcp, tolucky.jfrog.io]: dev.gcp
+user: admin
+token:
+prefix: hello
+create repos
 Successfully created repository 'hello-maven-local' 
 Successfully created repository 'hello-maven-remote' 
 Successfully created repository 'hello-maven'
 ```
+
 Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
 ```
 $ cd ..
@@ -55,6 +72,8 @@ $ jfrog c use dev.gcp
 ```
 
 ## Build and Deploy
+
+### With Projects
 ```
 $ jfrog mvn clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
 $ jfrog rt bce --project=hello hello-maven-manual-build 1
@@ -64,4 +83,16 @@ $ jfrog rt bp --project=hello hello-maven-manual-build 1
 To completely delete local caches as well, use the following command instead
 ```
 $ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
+```
+
+### Without Projects
+```
+$ jfrog mvn clean deploy --build-name=hello-maven-manual-build --build-number=1
+$ jfrog rt bce hello-maven-manual-build 1
+$ jfrog rt bag hello-maven-manual-build 1 ..
+$ jfrog rt bp hello-maven-manual-build 1
+```
+To completely delete local caches as well, use the following command instead
+```
+$ jfrog mvn -U dependency:purge-local-repository clean deploy --build-name=hello-maven-manual-build --build-number=1
 ```

@@ -1,5 +1,6 @@
 list=`echo $(jfrog c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
 read -p "server id [$list]: " server_id
+read -p "user: " user
 read -sp "token: " token
 echo ""
 read -p "project: " project
@@ -14,8 +15,8 @@ echo ""
 
 echo "create repos"
 sed "s/_PROJECT/${project}/g" maven-local.json |\
-  curl -u admin:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven-local" -d @-
+  curl -u ${user}:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven-local" -d @-
 sed "s/_PROJECT/${project}/g" maven-remote.json |\
-  curl -u admin:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven-remote" -d @-
+  curl -u ${user}:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven-remote" -d @-
 sed "s/_PROJECT/${project}/g" maven.json |\
-  curl -u admin:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven" -d @-
+  curl -u ${user}:${token} -X PUT -H "Content-Type: application/json" "${url}/artifactory/api/repositories/${project}-maven" -d @-
