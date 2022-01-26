@@ -1,6 +1,0 @@
-{
-  "rclass" : "virtual",
-  "packageType": "maven",
-  "repositories": ["_PREFIX-maven-local", "_PREFIX-maven-remote"],
-  "defaultDeploymentRepo": "_PREFIX-maven-local"
-}

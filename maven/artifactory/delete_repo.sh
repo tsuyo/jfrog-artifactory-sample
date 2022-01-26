@@ -1,11 +1,13 @@
 list=`echo $(jfrog c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
 read -p "server id [$list]: " server_id
-read -p "prefix: " prefix
+read -sp "token: " token
+echo ""
+read -p "project: " project
 
 url=`jfrog c s $server_id | head -2 | tail -1 | awk '{print $4}'`
 url=${url::-1}
 
 echo "delete repos"
-jfrog rt rdel --quiet ${prefix}-maven
-jfrog rt rdel --quiet ${prefix}-maven-local
-jfrog rt rdel --quiet ${prefix}-maven-remote
+jfrog rt rdel --quiet ${project}-maven
+jfrog rt rdel --quiet ${project}-maven-local
+jfrog rt rdel --quiet ${project}-maven-remote
