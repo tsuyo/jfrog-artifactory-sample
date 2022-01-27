@@ -1,0 +1,7 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "remote",
+  "packageType": "docker",
+  "url" : "https://registry-1.docker.io/",
+  "xrayIndex" : true
+}

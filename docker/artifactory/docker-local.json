@@ -1,0 +1,6 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "local",
+  "packageType": "docker",
+  "xrayIndex" : true
+}
