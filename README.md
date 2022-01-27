@@ -15,11 +15,8 @@ Is the Artifactory reverse proxy configured to accept a client certificate? (y/n
 Create a project
 ```
 $ cd artifactory
-$ ./create_project.sh
-server id [prod, repo21, tolucky.jfrog.io, dev.gcp]: dev.gcp
-user: admin
-token: 
-project: hello
+$ ./create_project.sh -s dev.gcp -p hello
+artifactory token: 
 create project
 {
   "display_name" : "hello",
@@ -36,10 +33,7 @@ create project
 ```
 Delete a project (if something goes wrong or you no longer need it)
 ```
-$ cd artifactory
-$ ./delete_project.sh 
-server id [prod, repo21, tolucky.jfrog.io, dev.gcp]: dev.gcp
-token: 
-project: hello
+$ ./delete_project.sh -s dev.gcp -p test
+artifactory token: 
 delete project
 ```

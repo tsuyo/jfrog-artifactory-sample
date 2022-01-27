@@ -3,22 +3,17 @@
 ## JFrog Artifactory Configuration
 Create repos under a project
 ```
-$ cd artifactory
-$ ./create_repo.sh
-server id [prod, repo21, tolucky.jfrog.io, dev.gcp]: dev.gcp
-user: admin
-token: 
-project: hello
-create repos
+$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello maven ./artifactory
+artifactory password or token for user <admin>: 
+create repos (user: admin, server_id: dev.gcp, project: hello, repo_name: maven, repo_conf_dir: ./artifactory)
 Successfully created repository 'hello-maven-local' 
 Successfully created repository 'hello-maven-remote' 
-Successfully created repository 'hello-maven' 
+Successfully created repository 'hello-maven'
 ```
 
 ## Build and Deploy
 Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
 ```
-$ cd ..
 $ jfrog mvnc
 Resolve dependencies from Artifactory? (y/n) [y]? 
 Set Artifactory server ID [repo21]: dev.gcp
@@ -41,4 +36,17 @@ $ jfrog rt bp --project=hello hello-maven-manual-build 1
 To completely delete local caches as well, use the following command instead
 ```
 $ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
+```
+
+## Clean Up
+Delete repos once you finish
+```
+$ ../artifactory/delete_repo.sh hello maven
+delete repos
+[Info] Deleting repository hello-maven...
+[Info] Done deleting repository.
+[Info] Deleting repository hello-maven-local...
+[Info] Done deleting repository.
+[Info] Deleting repository hello-maven-remote...
+[Info] Done deleting repository.
 ```
