@@ -12,7 +12,7 @@ Successfully created repository 'hello-gradle'
 ```
 
 ## Build and Deploy
-Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
+Choose the repos for JFrog CLI (select the last repo ("hello-gradle" in the above case) for all questions below)
 ```
 $ jfrog gradlec
 Resolve dependencies from Artifactory? (y/n) [y]? 
@@ -46,10 +46,10 @@ Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello gradle
 delete repos
-[Info] Deleting repository hello-maven...
+[Info] Deleting repository hello-gradle...
 [Info] Done deleting repository.
-[Info] Deleting repository hello-maven-local...
+[Info] Deleting repository hello-gradle-local...
 [Info] Done deleting repository.
-[Info] Deleting repository hello-maven-remote...
+[Info] Deleting repository hello-gradle-remote...
 [Info] Done deleting repository.
 ```
