@@ -1,0 +1,7 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "virtual",
+  "packageType": "gradle",
+  "repositories": ["_PROJECT-gradle-local", "_PROJECT-gradle-remote"],
+  "defaultDeploymentRepo": "_PROJECT-gradle-local"
+}

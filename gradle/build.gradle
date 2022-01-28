@@ -1,0 +1,36 @@
+apply plugin: 'java'
+// apply plugin: 'maven-publish'
+
+// *** THIS SHOULD KEEP COMMENTED OUT (when artifactory resolves dependencies) BEGIN ***
+// repositories {
+//     mavenCentral()
+// }
+// *** THIS SHOULD KEEP COMMENTED OUT (when artifactory resolves dependencies) END ***
+
+group = 'dev.tsuyo'
+version = '0.0.1'
+sourceCompatibility = '11'
+
+// create a fat jar
+jar {
+    archiveBaseName = 'hello'
+    archiveVersion =  "${version}"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes "Main-Class": "dev.tsuyo.hello.HelloWorld"
+    }
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+// artifactoryPublish.skip = true
+
+dependencies {
+    implementation 'io.javalin:javalin:4.1.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.31'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'com.konghq:unirest-java:3.4.00'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+}
