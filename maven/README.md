@@ -26,16 +26,21 @@ Set repository for snapshot artifacts deployment (press Tab for options): hello-
 Would you like to filter out some of the deployed artifacts? (y/n) [n]? 
 [Info] maven build config successfully created.
 $ jfrog c use dev.gcp
+$ rm -fr ~/.m2 # delete local caches to confirm every dependency is resolved via artifactory
 ```
+Build manually
 ```
-$ jfrog mvn clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
-$ jfrog rt bce --project=hello hello-maven-manual-build 1
-$ jfrog rt bag --project=hello hello-maven-manual-build 1 ..
-$ jfrog rt bp --project=hello hello-maven-manual-build 1
+$ jfrog mvn clean deploy --project=hello --build-name=hello-maven-build --build-number=1
+# To completely delete local caches, use the following command instead of the above
+# $ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-build --build-number=1
+
+$ jfrog rt bce --project=hello hello-maven-build 1
+$ jfrog rt bag --project=hello hello-maven-build 1 ..
+$ jfrog rt bp --project=hello hello-maven-build 1
 ```
-To completely delete local caches as well, use the following command instead
+Or Build with script (the same as above)
 ```
-$ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-manual-build --build-number=1
+$ ./build.sh hello hello-maven-build 1
 ```
 
 ## Clean Up
