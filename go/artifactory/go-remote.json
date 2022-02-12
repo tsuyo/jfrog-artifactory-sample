@@ -1,0 +1,9 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "remote",
+  "packageType": "go",
+  "repoLayoutRef" : "go-default",
+  "url" : "https://proxy.golang.org/",
+  "vcsGitProvider" : "ARTIFACTORY",
+  "xrayIndex" : true
+}
