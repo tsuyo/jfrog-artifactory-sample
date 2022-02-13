@@ -12,12 +12,18 @@ Successfully created repository 'hello-docker'
 ```
 
 ## Build and Deploy
-Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
+Build manually
 ```
-$ cd ..
 $ docker login platform.dev.gcp.tsuyo.org
-$ docker build --build-arg URL=platform.dev.gcp.tsuyo.org/hello-docker -t platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1 -f docker/Dockerfile .
-$ docker push platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1
+$ docker build --no-cache --build-arg REG=platform.dev.gcp.tsuyo.org/hello-docker -t platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1 .
+$ jfrog rt dp platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1 hello-docker --project=hello --build-name=hello-docker-build --build-number=1
+$ jfrog rt bce --project=hello hello-docker-build 1
+$ jfrog rt bag --project=hello hello-docker-build 1 ..
+$ jfrog rt bp --project=hello hello-docker-build 1
+```
+Or Build with script (the same as above)
+```
+$ ./build.sh hello hello-docker-build 1 platform.dev.gcp.tsuyo.org hello-docker hello 0.0.1
 ```
 
 ## Clean Up
@@ -25,10 +31,10 @@ Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello docker
 delete repos
-[Info] Deleting repository hello-docker...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-docker-local...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-docker-remote...
-[Info] Done deleting repository.
+13:00:55 [Info] Deleting repository hello-docker...
+13:00:58 [Info] Done deleting repository.
+13:00:59 [Info] Deleting repository hello-docker-local...
+13:01:02 [Info] Done deleting repository.
+13:01:03 [Info] Deleting repository hello-docker-remote...
+13:01:04 [Info] Done deleting repository.
 ```

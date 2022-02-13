@@ -2,6 +2,7 @@
   "projectKey": "_PROJECT",
   "rclass" : "remote",
   "packageType": "docker",
+  "repoLayoutRef" : "simple-default",
   "url" : "https://registry-1.docker.io/",
   "xrayIndex" : true
 }

@@ -2,6 +2,7 @@
   "projectKey": "_PROJECT",
   "rclass" : "virtual",
   "packageType": "docker",
+  "repoLayoutRef" : "simple-default",
   "repositories": ["_PROJECT-docker-local", "_PROJECT-docker-remote"],
   "defaultDeploymentRepo": "_PROJECT-docker-local"
 }
