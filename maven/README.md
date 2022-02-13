@@ -26,14 +26,10 @@ Set repository for snapshot artifacts deployment (press Tab for options): hello-
 Would you like to filter out some of the deployed artifacts? (y/n) [n]? 
 [Info] maven build config successfully created.
 $ jfrog c use dev.gcp
-$ rm -fr ~/.m2 # delete local caches to confirm every dependency is resolved via artifactory
 ```
 Build manually
 ```
-$ jfrog mvn clean deploy --project=hello --build-name=hello-maven-build --build-number=1
-# To completely delete local caches, use the following command instead of the above
-# $ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-build --build-number=1
-
+$ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-build --build-number=1
 $ jfrog rt bce --project=hello hello-maven-build 1
 $ jfrog rt bag --project=hello hello-maven-build 1 ..
 $ jfrog rt bp --project=hello hello-maven-build 1
@@ -48,10 +44,10 @@ Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello maven
 delete repos
-[Info] Deleting repository hello-maven...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-maven-local...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-maven-remote...
-[Info] Done deleting repository.
+18:26:22 [Info] Deleting repository hello-maven...
+18:26:24 [Info] Done deleting repository.
+18:26:25 [Info] Deleting repository hello-maven-local...
+18:26:27 [Info] Done deleting repository.
+18:26:28 [Info] Deleting repository hello-maven-remote...
+18:26:29 [Info] Done deleting repository.
 ```
