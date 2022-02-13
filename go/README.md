@@ -42,11 +42,4 @@ $ ./build.sh hello hello-go-build 1 v1.0.0
 Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello go
-delete repos
-22:51:54 [Info] Deleting repository hello-go...
-22:51:57 [Info] Done deleting repository.
-22:51:57 [Info] Deleting repository hello-go-local...
-22:51:59 [Info] Done deleting repository.
-22:52:00 [Info] Deleting repository hello-go-remote...
-22:52:02 [Info] Done deleting repository.
 ```

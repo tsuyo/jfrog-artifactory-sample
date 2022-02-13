@@ -30,11 +30,4 @@ $ ./build.sh hello hello-docker-build 1 platform.dev.gcp.tsuyo.org hello-docker 
 Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello docker
-delete repos
-13:00:55 [Info] Deleting repository hello-docker...
-13:00:58 [Info] Done deleting repository.
-13:00:59 [Info] Deleting repository hello-docker-local...
-13:01:02 [Info] Done deleting repository.
-13:01:03 [Info] Deleting repository hello-docker-remote...
-13:01:04 [Info] Done deleting repository.
 ```

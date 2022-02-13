@@ -44,11 +44,4 @@ $ ./build.sh hello hello-gradle-build 1
 Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello gradle
-delete repos
-[Info] Deleting repository hello-gradle...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-gradle-local...
-[Info] Done deleting repository.
-[Info] Deleting repository hello-gradle-remote...
-[Info] Done deleting repository.
 ```

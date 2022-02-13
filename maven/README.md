@@ -43,11 +43,4 @@ $ ./build.sh hello hello-maven-build 1
 Delete repos once you finish
 ```
 $ ../artifactory/delete_repo.sh hello maven
-delete repos
-18:26:22 [Info] Deleting repository hello-maven...
-18:26:24 [Info] Done deleting repository.
-18:26:25 [Info] Deleting repository hello-maven-local...
-18:26:27 [Info] Done deleting repository.
-18:26:28 [Info] Deleting repository hello-maven-remote...
-18:26:29 [Info] Done deleting repository.
 ```
