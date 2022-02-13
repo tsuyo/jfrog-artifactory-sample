@@ -27,11 +27,10 @@ Is the Gradle Artifactory Plugin already applied in the build script? (y/n) [n]?
 Use Gradle wrapper? (y/n) [n]? 
 [Info] gradle build config successfully created.
 $ jfrog c use dev.gcp
-$ rm -fr ~/.gradle # delete local caches to confirm every dependency is resolved via artifactory
 ```
 Build manually
 ```
-$ jfrog gradle clean artifactoryPublish --project=hello --build-name=hello-gradle-build --build-number=1
+$ jfrog gradle --info --refresh-dependencies --no-build-cache clean artifactoryPublish --project=hello --build-name=hello-gradle-build --build-number=1
 $ jfrog rt bce --project=hello hello-gradle-build 1
 $ jfrog rt bag --project=hello hello-gradle-build 1 ..
 $ jfrog rt bp --project=hello hello-gradle-build 1
