@@ -1,4 +1,4 @@
-module github.com/tsuyo/jfrog-showcase/go
+module github.com/tsuyo/hello
 
 go 1.17
 
