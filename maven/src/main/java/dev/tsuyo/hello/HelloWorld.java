@@ -1,82 +1,52 @@
 package dev.tsuyo.hello;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Properties;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
-import io.javalin.Javalin;
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpServer;
 
 public class HelloWorld {
-    private Javalin app;
-
-    public HelloWorld() {
-        app = Javalin.create();
-        app.get("/", ctx -> ctx.json(new HelloInfo()));
-    }
 
     public void start(int port) {
-        app.start(port);
-    }
+        try {
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
-    public void stop() {
-        app.stop();
+            server.createContext("/", httpExchange -> {
+                String welcome = "Hello from Java!";
+                String message = System.getenv("MESSAGE");
+                String version = System.getenv("VERSION");
+                String hostname = InetAddress.getLocalHost().getHostName();
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Welcome", welcome);
+                map.put("Message", message);
+                map.put("Version", version);
+                map.put("Hostname", hostname);
+                String str = new Gson().toJson(map);
+
+                byte response[] = str.getBytes("UTF-8");
+
+                httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=UTF-8");
+                httpExchange.sendResponseHeaders(200, response.length);
+
+                OutputStream out = httpExchange.getResponseBody();
+                out.write(response);
+                out.close();
+            });
+
+            server.start();
+        } catch (Throwable tr) {
+            tr.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        new HelloWorld().start(8080);
+        int port = 8080;
+        System.out.printf("Server listening on port %s\n", port);
+        new HelloWorld().start(port);
     }
-}
-
-class HelloInfo {
-    private String version;
-    private String message;
-    private String hostname;
-
-    public HelloInfo() {
-        setVersion();
-        setMessage();
-        setHostname();
-    }
-
-    public void setVersion() {
-        try (InputStream input = HelloWorld.class.getClassLoader().getResourceAsStream("application.properties")) {
-            if (input == null) {
-                System.out.println("Sorry, unable to find application.properties");
-                return;
-            }
-
-            Properties prop = new Properties();
-            prop.load(input);
-            version = prop.getProperty("hello.version");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setMessage() {
-        message = System.getenv("MESSAGE");
-    }
-
-    public void setHostname() {
-        try {
-            hostname = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
 }
