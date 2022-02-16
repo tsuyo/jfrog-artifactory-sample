@@ -1,11 +1,14 @@
-apply plugin: 'java'
-// apply plugin: 'maven-publish'
+/* groovylint-disable-next-line CompileStatic */
+plugins {
+    id 'java'
+    // id 'maven-publish'
+}
 
-// *** THIS SHOULD KEEP COMMENTED OUT (when artifactory resolves dependencies) BEGIN ***
-// repositories {
-//     mavenCentral()
-// }
-// *** THIS SHOULD KEEP COMMENTED OUT (when artifactory resolves dependencies) END ***
+repositories {
+    if (!project.hasProperty('artifactoryPublish')) { // if normal gradle build
+        mavenCentral()
+    }
+}
 
 group = 'dev.tsuyo'
 version = '0.0.1'
@@ -17,20 +20,16 @@ jar {
     archiveVersion =  "${version}"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes "Main-Class": "dev.tsuyo.hello.HelloWorld"
+        attributes 'Main-Class': 'dev.tsuyo.hello.HelloWorld'
     }
     from {
-        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        configurations.runtimeClasspath.findAll { rc -> rc.name.endsWith('jar') }.collect { jar -> zipTree(jar) }
     }
 }
 
 // artifactoryPublish.skip = true
 
 dependencies {
-    implementation 'io.javalin:javalin:4.1.1'
-    implementation 'org.slf4j:slf4j-simple:1.7.31'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    testImplementation 'com.konghq:unirest-java:3.4.00'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    // testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
