@@ -3,7 +3,7 @@ const os = require('os');
 const _ = require('lodash');
 
 const requestListener = (req, res) => {
-    const welcome = 'Hello from NPM!';
+    const welcome = 'Hello from Node.js!';
     const { MESSAGE, VERSION } = process.env;
     const hostname = os.hostname()
 
