@@ -1,0 +1,9 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "remote",
+  "packageType": "pypi",
+  "repoLayoutRef" : "simple-default",
+  "url" : "https://files.pythonhosted.org",
+  "vcsGitProvider" : "ARTIFACTORY",
+  "xrayIndex" : true
+}

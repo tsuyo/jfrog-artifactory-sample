@@ -1,0 +1,7 @@
+{
+  "projectKey": "_PROJECT",
+  "rclass" : "local",
+  "packageType": "pypi",
+  "repoLayoutRef" : "simple-default",
+  "xrayIndex" : true
+}
