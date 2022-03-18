@@ -1,1 +1,2 @@
-rootProject.name = 'hello' 
+/* groovylint-disable-next-line CompileStatic */
+rootProject.name = 'hello-gradle'
