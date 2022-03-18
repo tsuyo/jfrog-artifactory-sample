@@ -1,20 +1,40 @@
 # Hello Maven
 
-## JFrog Artifactory Configuration
-Create repos under a project
+## Development Flow without JFrog
+
+### Resolve dependencies
 ```
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello maven ./artifactory
-artifactory password or token for user <admin>: 
-create repos (user: admin, server_id: dev.gcp, project: hello, repo_name: maven, repo_conf_dir: ./artifactory)
-Successfully created repository 'hello-maven-local' 
-Successfully created repository 'hello-maven-remote' 
-Successfully created repository 'hello-maven'
+$ mvn dependency:resolve
 ```
 
-## Build and Deploy
-Choose the repos for JFrog CLI (select the last repo ("hello-maven" in the above case) for all questions below)
+### Build
 ```
-$ jfrog mvnc
+$ mvn clean package
+```
+
+### Run
+```
+$ mvn exec:java -Dexec.mainClass=dev.tsuyo.hello.HelloWorld
+```
+
+### Publish
+Local
+```
+$ mvn install
+```
+
+## Development Flow with JFrog
+
+### Preparation
+Create repos under a project ("hello" in this case)
+```
+$ jf c use dev.gcp
+$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello maven ./artifactory
+```
+
+Configure JFrog CLI to use the created virtual repo ("hello-maven")
+```
+$ jf mvnc
 Resolve dependencies from Artifactory? (y/n) [y]? 
 Set Artifactory server ID [repo21]: dev.gcp
 Set resolution repository for release dependencies (press Tab for options): hello-maven
@@ -25,22 +45,44 @@ Set repository for release artifacts deployment (press Tab for options): hello-m
 Set repository for snapshot artifacts deployment (press Tab for options): hello-maven
 Would you like to filter out some of the deployed artifacts? (y/n) [n]? 
 [Info] maven build config successfully created.
-$ jfrog c use dev.gcp
-```
-Build manually
-```
-$ jfrog mvn -U dependency:purge-local-repository clean deploy --project=hello --build-name=hello-maven-build --build-number=1
-$ jfrog rt bce --project=hello hello-maven-build 1
-$ jfrog rt bag --project=hello hello-maven-build 1 ..
-$ jfrog rt bp --project=hello hello-maven-build 1
-```
-Or Build with script (the same as above)
-```
-$ ./build.sh hello hello-maven-build 1
 ```
 
-## Clean Up
-Delete repos once you finish
+### Resolve dependencies
+```
+$ jf mvn dependency:resolve
+```
+
+### Build
+```
+$ jf mvn clean package
+```
+
+### Run
+```
+$ jf mvn exec:java -Dexec.mainClass=dev.tsuyo.hello.HelloWorld
+```
+
+### Publish
+Artifact
+```
+$ jf mvn deploy --project=hello --build-name=hello-maven-build --build-number=1
+```
+
+Build Info
+```
+$ jf rt bce --project=hello hello-maven-build 1
+$ jf rt bag --project=hello hello-maven-build 1 ..
+$ jf rt bp --project=hello hello-maven-build 1
+```
+
+### Clean Up
+Delete repos if you want
 ```
 $ ../artifactory/delete_repo.sh hello maven
+```
+
+## Automation
+You can use the following script to automate this procedure
+```
+$ ./run.sh hello hello-maven-build 1
 ```
