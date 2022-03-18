@@ -29,7 +29,7 @@ func main() {
 // hello responds to the request with a plain-text "Hello, world" message.
 func hello(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Serving request: %s", r.URL.Path)
-	log.Printf(quote.Hello())
+	log.Println(quote.Hello())
 
 	welcome := "Hello from Go!"
 	host, _ := os.Hostname()
@@ -49,5 +49,5 @@ func hello(w http.ResponseWriter, r *http.Request) {
 		"Hostname": host,
 	}
 	rbytes, _ := json.Marshal(rmap)
-	fmt.Fprintf(w, string(rbytes))
+	fmt.Fprintln(w, string(rbytes))
 }

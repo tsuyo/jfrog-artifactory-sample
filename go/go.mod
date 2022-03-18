@@ -1,4 +1,4 @@
-module github.com/tsuyo/hello
+module github.com/tsuyo/hello-go
 
 go 1.17
 
