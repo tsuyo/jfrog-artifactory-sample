@@ -1,20 +1,39 @@
 # Hello Gradle
 
-## JFrog Artifactory Configuration
-Create repos under a project
+## Development Flow without JFrog
+
+### Resolve dependencies
 ```
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello gradle ./artifactory
-artifactory password or token for user <admin>: 
-create repos (user: admin, server_id: dev.gcp, project: hello, repo_name: gradle, repo_conf_dir: ./artifactory)
-Successfully created repository 'hello-gradle-local' 
-Successfully created repository 'hello-gradle-remote' 
-Successfully created repository 'hello-gradle'
+$ gradle dependencies # download pom only
 ```
 
-## Build and Deploy
-Choose the repos for JFrog CLI (select the last repo ("hello-gradle" in the above case) for all questions below)
+### Build
 ```
-$ jfrog gradlec
+$ gradle clean build
+```
+
+### Run
+```
+$ gradle run
+```
+
+### Publish
+Local
+```
+$ gradle publishToMavenLocal
+```
+
+## Development Flow with JFrog
+
+### Preparation
+Create repos under a project ("hello" in this case)
+```
+$ jf c use dev.gcp
+$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello gradle ./artifactory
+```
+Configure JFrog CLI to use the created virtual repo ("hello-gradle")
+```
+$ jf gradlec
 Resolve dependencies from Artifactory? (y/n) [y]? 
 Set Artifactory server ID [dev.gcp]: 
 Set repository for dependencies resolution (press Tab for options): hello-gradle
@@ -26,22 +45,44 @@ Deploy Ivy descriptors? (y/n) [n]?
 Is the Gradle Artifactory Plugin already applied in the build script? (y/n) [n]? 
 Use Gradle wrapper? (y/n) [n]? 
 [Info] gradle build config successfully created.
-$ jfrog c use dev.gcp
-```
-Build manually
-```
-$ jfrog gradle --info --refresh-dependencies --no-build-cache clean artifactoryPublish --project=hello --build-name=hello-gradle-build --build-number=1
-$ jfrog rt bce --project=hello hello-gradle-build 1
-$ jfrog rt bag --project=hello hello-gradle-build 1 ..
-$ jfrog rt bp --project=hello hello-gradle-build 1
-```
-Or Build with script (the same as above)
-```
-$ ./build.sh hello hello-gradle-build 1
 ```
 
-## Clean Up
-Delete repos once you finish
+### Resolve dependencies
+```
+$ jf gradle dependencies # download pom only
+```
+
+### Build
+```
+$ jf gradle --info clean build
+```
+
+### Run
+```
+$ jf gradle run
+```
+
+### Publish
+Artifact
+```
+$ jf gradle artifactoryPublish --project=hello --build-name=hello-gradle-build --build-number=1
+```
+
+Build Info
+```
+$ jf rt bce --project=hello hello-gradle-build 1
+$ jf rt bag --project=hello hello-gradle-build 1 ..
+$ jf rt bp --project=hello hello-gradle-build 1
+```
+
+### Clean up
+Delete repos if you want
 ```
 $ ../artifactory/delete_repo.sh hello gradle
+```
+
+## Automation
+You can use the following script to automate this procedure
+```
+$ ./run.sh hello hello-gradle-build 1
 ```

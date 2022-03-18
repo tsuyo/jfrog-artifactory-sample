@@ -1,7 +1,8 @@
 /* groovylint-disable-next-line CompileStatic */
 plugins {
     id 'java'
-    // id 'maven-publish'
+    id 'application'
+    id 'maven-publish'
 }
 
 repositories {
@@ -13,18 +14,21 @@ repositories {
 group = 'dev.tsuyo'
 version = '0.0.1'
 sourceCompatibility = '11'
+mainClassName = 'dev.tsuyo.hello.HelloWorld'
 
 // create a fat jar
 jar {
-    archiveBaseName = 'hello'
-    archiveVersion =  "${version}"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'dev.tsuyo.hello.HelloWorld'
+        attributes 'Main-Class': "${mainClassName}"
     }
     from {
         configurations.runtimeClasspath.findAll { rc -> rc.name.endsWith('jar') }.collect { jar -> zipTree(jar) }
     }
+}
+
+application {
+    mainClass = "${project.mainClassName}"
 }
 
 // artifactoryPublish.skip = true
@@ -32,4 +36,15 @@ jar {
 dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     // testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }
