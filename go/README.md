@@ -4,7 +4,7 @@
 
 ### Resolve dependencies
 ```
-$ go install
+$ go mod download
 ```
 
 ### Build
@@ -39,7 +39,7 @@ Set repository for artifacts deployment (press Tab for options): hello-go
 
 ### Resolve dependencies
 ```
-$ jf go install
+$ jf go mod download
 ```
 
 ### Build
