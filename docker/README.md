@@ -1,33 +1,92 @@
 # Hello Docker
 
-## JFrog Artifactory Configuration
-Create repos under a project
+## Development Flow without JFrog
+
+### Preparation
 ```
+$ docker login
+```
+
+### Resolve dependencies
+N/A
+
+### Build
+```
+$ docker build --no-cache -t hello-docker:1.0.0 .
+```
+
+### Run
+```
+$ docker run -it -p 8080:8080 hello-docker:1.0.0
+```
+
+### Publish
+Remote
+
+Create an account on [Docker Hub](https://hub.docker.com/)
+```
+$ docker tag hello-docker:1.0.0 <docker_id>/hello-docker:1.0.0
+$ docker push <docker_id>/hello-docker:1.0.0
+```
+
+### Test
+```
+$ docker pull <docker_id>/hello-docker:1.0.0
+```
+
+## Development Flow with JFrog
+
+### Preparation
+Create repos under a project ("hello" in this case)
+```
+$ jf c use dev.gcp
 $ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello docker ./artifactory
-artifactory password or token for user <admin>: 
-create repos (user: admin, server_id: dev.gcp, project: hello, repo_name: docker, repo_conf_dir: ./artifactory)
-Successfully created repository 'hello-docker-local' 
-Successfully created repository 'hello-docker-remote' 
-Successfully created repository 'hello-docker'
+```
+Login to JFrog Platform
+```
+$ docker login <jfrog_platform_url>
 ```
 
-## Build and Deploy
-Build manually
+### Resolve dependencies
+N/A
+
+### Build
 ```
-$ docker login platform.dev.gcp.tsuyo.org
-$ docker build --no-cache --build-arg REG=platform.dev.gcp.tsuyo.org/hello-docker -t platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1 .
-$ jfrog rt dp platform.dev.gcp.tsuyo.org/hello-docker/hello:0.0.1 hello-docker --project=hello --build-name=hello-docker-build --build-number=1
-$ jfrog rt bce --project=hello hello-docker-build 1
-$ jfrog rt bag --project=hello hello-docker-build 1 ..
-$ jfrog rt bp --project=hello hello-docker-build 1
-```
-Or Build with script (the same as above)
-```
-$ ./build.sh hello hello-docker-build 1 platform.dev.gcp.tsuyo.org hello-docker hello 0.0.1
+$ docker build --no-cache --build-arg REG=<jfrog_platform_url>/hello-docker -t hello-docker:1.0.0 .
 ```
 
-## Clean Up
-Delete repos once you finish
+### Run
+```
+$ docker run -it -p 8080:8080 hello-docker:1.0.0
+```
+
+### Publish
+Artifact
+```
+$ docker tag hello-docker:1.0.0 <jfrog_platform_url>/hello-docker/hello-docker:1.0.0
+$ jf docker push <jfrog_platform_url>/hello-docker/hello-docker:1.0.0 --project=hello --build-name=hello-docker-build --build-number=1
+```
+
+Build Info
+```
+$ jf rt bce --project=hello hello-docker-build 1
+$ jf rt bag --project=hello hello-docker-build 1 ..
+$ jf rt bp --project=hello hello-docker-build 1
+```
+
+### Test
+```
+docker pull <jfrog_platform_url>/hello-docker/hello-docker:1.0.0
+```
+
+### Clean up
+Delete repos if you want
 ```
 $ ../artifactory/delete_repo.sh hello docker
+```
+
+## Automation
+You can use the following script to automate this procedure
+```
+$ ./run.sh hello hello-docker-build 1 platform.dev.gcp.tsuyo.org hello-docker hello-docker 1.0.0
 ```

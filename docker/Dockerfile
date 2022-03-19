@@ -1,4 +1,4 @@
-ARG REG
+ARG REG=docker.io/library
 FROM ${REG}/golang:alpine AS builder
 
 # Set necessary environmet variables needed for our image
@@ -18,7 +18,7 @@ RUN \
   wget -q ${SRC_LOC}/go.mod && \
   wget -q ${SRC_LOC}/go.sum
 
-# Download dependency using go mod
+# Download dependencies
 RUN go mod download
 
 # Build the application
