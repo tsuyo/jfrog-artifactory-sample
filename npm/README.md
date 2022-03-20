@@ -1,20 +1,45 @@
 # Hello NPM
 
-## JFrog Artifactory Configuration
-Create repos under a project
+## Development Flow without JFrog
+
+### Resolve dependencies
 ```
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello npm ./artifactory
-artifactory password or token for user <admin>: 
-create repos (user: admin, server_id: dev.gcp, project: hello, repo_name: npm, repo_conf_dir: ./artifactory)
-Successfully created repository 'hello-npm-local' 
-Successfully created repository 'hello-npm-remote' 
-Successfully created repository 'hello-npm' 
+$ npm i
 ```
 
-## Build and Deploy
-Choose the repos for JFrog CLI (select the last repo ("hello-npm" in the above case) for all questions below)
+### Build
+N/A
+
+### Run
 ```
-$ jfrog npmc
+$ npm start
+```
+
+### Publish
+Remote
+
+Create an account on [npmjs.com](https://npmjs.com/)
+```
+$ npm login
+$ npm publish
+```
+
+### Test
+```
+$ npm i tsuyo-hello-npm
+```
+
+## Development Flow with JFrog
+
+### Preparation
+Create repos under a project ("hello" in this case)
+```
+$ jf c use dev.gcp
+$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello npm ./artifactory
+```
+Configure JFrog CLI to use the created virtual repo ("hello-npm")
+```
+$ jf npmc
 Resolve dependencies from Artifactory? (y/n) [y]? 
 Set Artifactory server ID [dev.gcp]: 
 Set repository for dependencies resolution (press Tab for options): hello-npm
@@ -22,24 +47,48 @@ Deploy project artifacts to Artifactory? (y/n) [y]?
 Set Artifactory server ID [dev.gcp]: 
 Set repository for artifacts deployment (press Tab for options): hello-npm
 15:33:30 [Info] npm build config successfully created.
-$ jfrog c use dev.gcp
-```
-Build manually
-```
-$ npm cache clean --force # clear local cache (~/.npm) - might not be recommended, but jfrog cli might have an issue with the caches
-$ jfrog npm ci --project=hello --build-name=hello-npm-build --build-number=1   # "npm ci" removes node_modules first
-$ jfrog npm publish --project=hello --build-name=hello-npm-build --build-number=1
-$ jfrog rt bce --project=hello hello-npm-build 1
-$ jfrog rt bag --project=hello hello-npm-build 1 ..
-$ jfrog rt bp --project=hello hello-npm-build 1
-```
-Or Build with script (the same as above)
-```
-$ ./build.sh hello hello-npm-build 1
 ```
 
-## Clean Up
-Delete repos once you finish
+### Resolve dependencies
+```
+$ jf npm i --project=hello --build-name=hello-npm-build --build-number=1
+```
+
+### Build
+N/A
+
+### Run
+```
+$ npm start
+```
+
+### Publish
+Artifact
+```
+$ jf npm publish --project=hello --build-name=hello-npm-build --build-number=1
+```
+
+Build Info
+```
+$ jf rt bce --project=hello hello-npm-build 1
+$ jf rt bag --project=hello hello-npm-build 1 ..
+$ jf rt bp --project=hello hello-npm-build 1
+```
+
+### Test
+```
+$ jf npm i tsuyo-hello-npm
+$ jf npm uninstall tsuyo-hello-npm
+```
+
+### Clean up
+Delete repos if you want
 ```
 $ ../artifactory/delete_repo.sh hello npm
+```
+
+## Automation
+You can use the following script to automate this procedure
+```
+$ ./run.sh hello hello-npm-build 1
 ```
