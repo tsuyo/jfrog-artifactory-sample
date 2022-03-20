@@ -1,5 +1,5 @@
 error_message() {
-    list=`echo $(jfrog c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
+    list=`echo $(jf c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
     echo "Usage: $0 -s <server_id> ($list) [-p] [-t <token>] <project>"
     exit 0
 }
@@ -39,11 +39,11 @@ if [ "$server_id" == "" ] || [ "$token" == "" ] || [ "$project" == "" ]; then
   error_message
 fi
 
-url=`jfrog c s $server_id | head -2 | tail -1 | awk '{print $4}'`
+url=`jf c s $server_id | head -2 | tail -1 | awk '{print $4}'`
 url=${url::-1}
 
 echo "delete project"
 curl -H "Authorization: Bearer ${token}" -X DELETE "${url}/access/api/v1/projects/${project}"
 
 echo "delete build-info repo"
-jfrog rt rdel --quiet ${project}-build-info
+jf rt rdel --quiet ${project}-build-info

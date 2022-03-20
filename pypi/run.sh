@@ -1,5 +1,5 @@
 error_message() {
-    list=`echo $(jfrog c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
+    list=`echo $(jf c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
     echo "Usage: $0 -s <server_id> ($list) -r <repo_name> <project> <build_name> <build_number>"
     exit 0
 }
@@ -32,7 +32,7 @@ if [ "$server_id" == "" ] || [ "$repo_name" == "" ] || [ "$project" == "" ] || [
   error_message
 fi
 
-url=`jfrog c s $server_id | head -2 | tail -1 | awk '{print $4}'`
+url=`jf c s $server_id | head -2 | tail -1 | awk '{print $4}'`
 url=${url::-1}
 
 repository_url="${url}/artifactory/api/pypi/${project}-${repo_name}"
@@ -45,7 +45,7 @@ python3 -m venv venv
 python3 -m pip install --upgrade pip
 
 # Resolve dependencies
-jfrog pip install Babel --project=${project} --build-name=${build_name} --build-number=${build_number}--no-cache-dir --force-reinstall
+jf pip install Babel --project=${project} --build-name=${build_name} --build-number=${build_number}--no-cache-dir --force-reinstall
 
 # Build
 python3 -m pip install --upgrade setuptools wheel
@@ -55,9 +55,9 @@ python3 setup.py sdist bdist_wheel
 python3 -m pip install --upgrade twine
 python3 -m twine upload --repository-url ${repository_url} dist/*
 
-jfrog rt bce --project=${project} ${build_name} ${build_number}
-jfrog rt bag --project=${project} ${build_name} ${build_number} ..
-jfrog rt bp --project=${project} ${build_name} ${build_number}
+jf rt bce --project=${project} ${build_name} ${build_number}
+jf rt bag --project=${project} ${build_name} ${build_number} ..
+jf rt bp --project=${project} ${build_name} ${build_number}
 
 # Clean up
 deactivate

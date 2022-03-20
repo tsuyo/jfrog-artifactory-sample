@@ -1,5 +1,5 @@
 error_message() {
-    list=`echo $(jfrog c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
+    list=`echo $(jf c s | grep "Server ID:" | awk '{print $3}') | sed "s/ /, /g"`
     echo "Usage: $0 -s <server_id> ($list) [-u <user>] [-p] [-t <token_or_password>] <project> <repo_name> <repo_conf_dir>"
     exit 0
 }
@@ -44,7 +44,7 @@ if [ "$server_id" == "" ] || [ "$token" == "" ] || [ "$project" == "" ] || [ "$r
   error_message
 fi
 
-url=`jfrog c s $server_id | head -2 | tail -1 | awk '{print $4}'`
+url=`jf c s $server_id | head -2 | tail -1 | awk '{print $4}'`
 url=${url::-1}
 
 echo "create repos (user: ${user}, server_id: ${server_id}, project: ${project}, repo_name: ${repo_name}, repo_conf_dir: ${repo_conf_dir})"

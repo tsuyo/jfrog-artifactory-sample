@@ -52,12 +52,12 @@ Create an account on [PyPI](https://pypi.org/)
 ### Preparation
 Create repos under a project ("hello" in this case)
 ```
-$ jfrog c use dev.gcp
+$ jf c use dev.gcp
 $ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello pypi ./artifactory
 ```
 Configure JFrog CLI to use the created virtual repo ("hello-pypi")
 ```
-$ jfrog pipc
+$ jf pipc
 Resolve dependencies from Artifactory? (y/n) [y]? 
 Set Artifactory server ID [dev.gcp]: 
 Set repository for dependencies resolution (press Tab for options): hello-pypi
@@ -71,7 +71,7 @@ $ python3 -m pip install --upgrade pip
 
 ### Resolve dependencies
 ```
-(venv) $ jfrog pip install Babel --project=hello --build-name=hello-pypi-build --build-number=1 --no-cache-dir --force-reinstall
+(venv) $ jf pip install Babel --project=hello --build-name=hello-pypi-build --build-number=1 --no-cache-dir --force-reinstall
 ```
 
 ### Build
@@ -97,14 +97,14 @@ Enter your password:
 
 Build Info
 ```
-(venv) $ jfrog rt bce --project=hello hello-pypi-build 1
-(venv) $ jfrog rt bag --project=hello hello-pypi-build 1 ..
-(venv) $ jfrog rt bp --project=hello hello-pypi-build 1
+(venv) $ jf rt bce --project=hello hello-pypi-build 1
+(venv) $ jf rt bag --project=hello hello-pypi-build 1 ..
+(venv) $ jf rt bp --project=hello hello-pypi-build 1
 ```
 
 ### Test
 ```
-(venv) $ jfrog pip install tsuyo-hello
+(venv) $ jf pip install tsuyo-hello
 (venv) $ python3 -m hello
 ```
 

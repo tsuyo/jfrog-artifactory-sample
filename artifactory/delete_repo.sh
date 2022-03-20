@@ -11,6 +11,6 @@ if [ "$project" == "" ] || [ "$repo_name" == "" ]; then
 fi
 
 echo "delete repos"
-jfrog rt rdel --quiet ${project}-${repo_name}
-jfrog rt rdel --quiet ${project}-${repo_name}-local
-jfrog rt rdel --quiet ${project}-${repo_name}-remote
+jf rt rdel --quiet ${project}-${repo_name}
+jf rt rdel --quiet ${project}-${repo_name}-local
+jf rt rdel --quiet ${project}-${repo_name}-remote

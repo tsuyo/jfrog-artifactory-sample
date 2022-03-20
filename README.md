@@ -2,7 +2,7 @@
 
 ## JFrog CLI Configuration
 ```
-$ jfrog c add
+$ jf c add
 Server ID: dev.gcp
 JFrog platform URL: https://platform.dev.gcp.tsuyo.org          
 JFrog access token (Leave blank for username and password/API key): 
