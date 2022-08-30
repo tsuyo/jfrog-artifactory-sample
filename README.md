@@ -1,39 +1,26 @@
 # Common Configuration
 
+## Prerequisites
+Install JFrog CLI and JFrog Tools
+```
+$ brew install jfrog-cli
+$ brew tap tsuyo/tap
+$ brew install jfrog-tools
+```
+
 ## JFrog CLI Configuration
 ```
-$ jf c add
-Server ID: dev.gcp
-JFrog platform URL: https://platform.dev.gcp.tsuyo.org          
-JFrog access token (Leave blank for username and password/API key): 
-JFrog username: admin
-JFrog password or API key: 
-Is the Artifactory reverse proxy configured to accept a client certificate? (y/n) [n]? 
+$ jf c add $SERVER_ID --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASSWORD --interactive=false
 ```
 
 ## JFrog Artifactory Configuration
-Create a project
+If you want to use a project in JFrog Artifactory, create one (e.g. "hello")
 ```
-$ cd artifactory
-$ ./create_project.sh -s dev.gcp -p hello
+$ jf-create-proj -s $SERVER_ID -p hello
 artifactory token: 
-create project
-{
-  "display_name" : "hello",
-  "admin_privileges" : {
-    "manage_members" : true,
-    "manage_resources" : true,
-    "index_resources" : true
-  },
-  "storage_quota_bytes" : -1,
-  "soft_limit" : false,
-  "storage_quota_email_notification" : true,
-  "project_key" : "hello"
-}
 ```
 Delete a project (if something goes wrong or you no longer need it)
 ```
-$ ./delete_project.sh -s dev.gcp -p test
+$ jf-delete-proj -s $SERVER_ID -p hello
 artifactory token: 
-delete project
 ```
