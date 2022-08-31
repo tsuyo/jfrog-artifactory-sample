@@ -8,7 +8,9 @@ $ docker login
 ```
 
 ### Resolve dependencies
-N/A
+```
+$ docker pull golang:alpine
+```
 
 ### Build
 ```
@@ -25,68 +27,69 @@ Remote
 
 Create an account on [Docker Hub](https://hub.docker.com/)
 ```
-$ docker tag hello-docker:1.0.0 <docker_id>/hello-docker:1.0.0
-$ docker push <docker_id>/hello-docker:1.0.0
+$ docker tag hello-docker:1.0.0 $DOCKER_ID/hello-docker:1.0.0
+$ docker push $DOCKER_ID/hello-docker:1.0.0
 ```
 
 ### Test
 ```
-$ docker pull <docker_id>/hello-docker:1.0.0
+$ docker pull $DOCKER_ID/hello-docker:1.0.0
 ```
 
 ## Development Flow with JFrog
 
 ### Preparation
-Create repos under a project ("hello" in this case)
+Create repos
 ```
-$ jf c use dev.gcp
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello docker ./artifactory
+$ jf c use $SERVER_ID
+$ jf-quick-setup -k hello -t docker
 ```
 Login to JFrog Platform
 ```
-$ docker login <jfrog_platform_url>
+$ docker login $JFROG_PLATFORM_URL
 ```
 
 ### Resolve dependencies
-N/A
+```
+$ docker pull $JFROG_PLATFORM_URL/hello-docker/golang:alpine
+```
 
 ### Build
 ```
-$ docker build --no-cache --build-arg REG=<jfrog_platform_url>/hello-docker -t hello-docker:1.0.0 .
+$ docker build --no-cache --build-arg REG=$JFROG_PLATFORM_URL/hello-docker -t $JFROG_PLATFORM_URL/hello-docker/hello-docker:1.0.0 .
 ```
 
 ### Run
 ```
-$ docker run -it -p 8080:8080 hello-docker:1.0.0
+$ docker run -it -p 8080:8080 $JFROG_PLATFORM_URL/hello-docker/hello-docker:1.0.0
 ```
 
 ### Publish
 Artifact
 ```
-$ docker tag hello-docker:1.0.0 <jfrog_platform_url>/hello-docker/hello-docker:1.0.0
-$ jf docker push <jfrog_platform_url>/hello-docker/hello-docker:1.0.0 --project=hello --build-name=hello-docker-build --build-number=1
+$ jf docker push $JFROG_PLATFORM_URL/hello-docker/hello-docker:1.0.0 --build-name=hello-docker-build --build-number=1
 ```
 
 Build Info
 ```
-$ jf rt bce --project=hello hello-docker-build 1
-$ jf rt bag --project=hello hello-docker-build 1 ..
-$ jf rt bp --project=hello hello-docker-build 1
+$ jf rt bce hello-docker-build 1
+$ jf rt bag hello-docker-build 1
+$ jf rt bp hello-docker-build 1
 ```
 
 ### Test
 ```
-docker pull <jfrog_platform_url>/hello-docker/hello-docker:1.0.0
+docker pull $JFROG_PLATFORM_URL/hello-docker/hello-docker:1.0.0
 ```
 
 ### Clean up
 Delete repos if you want
 ```
-$ ../artifactory/delete_repo.sh hello docker
+$ jf-quick-teardown -k hello -t docker
 ```
 
 ## Automation
-You can use the following script to automate this procedure
+You can use `jf-docker-build` command in jfrog-tools to automate this procedure
 ```
-$ ./run.sh hello hello-docker-build 1 platform.dev.gcp.tsuyo.org hello-docker hello-docker 1.0.0
+$ jf-docker-build -u $JFROG_PLATFORM_URL -r hello-docker -i hello-docker -v 1.0.0 hello-docker-build 1
 ```
