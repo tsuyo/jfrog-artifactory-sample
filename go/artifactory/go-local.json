@@ -1,7 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "local",
-  "packageType": "go",
-  "repoLayoutRef" : "go-default",
-  "xrayIndex" : true
-}

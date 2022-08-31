@@ -20,21 +20,14 @@ $ go run main.go
 ## Development Flow with JFrog
 
 ### Preparation
-Create repos under a project ("hello" in this case)
+Create repos
 ```
-$ jf c use dev.gcp
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello go ./artifactory
+$ jf c use $SERVER_ID
+$ jf-quick-setup -k hello -t go
 ```
 Configure JFrog CLI to use the created virtual repo ("hello-go")
 ```
-$ jf goc
-Resolve dependencies from Artifactory? (y/n) [y]? 
-Set Artifactory server ID [dev.gcp]: 
-Set repository for dependencies resolution (press Tab for options): hello-go
-Deploy project artifacts to Artifactory? (y/n) [y]? 
-Set Artifactory server ID [dev.gcp]: 
-Set repository for artifacts deployment (press Tab for options): hello-go
-21:54:00 [Info] go build config successfully created.
+$ jf goc --repo-deploy=hello-go --repo-resolve=hello-go --server-id-deploy=$SERVER_ID --server-id-resolve=$SERVER_ID
 ```
 
 ### Resolve dependencies
@@ -44,7 +37,7 @@ $ jf go mod download
 
 ### Build
 ```
-$ jf go build --project=hello --build-name=hello-go-build --build-number=1
+$ jf go build --build-name=hello-go-build --build-number=1
 ```
 
 ### Run
@@ -55,24 +48,24 @@ $ jf go run main.go
 ### Publish
 Artifact
 ```
-$ jf gp v1.0.0 --project=hello --build-name=hello-go-build --build-number=1
+$ jf gp v1.0.0 --build-name=hello-go-build --build-number=1
 ```
 
 Build Info
 ```
-$ jf rt bce --project=hello hello-go-build 1
-$ jf rt bag --project=hello hello-go-build 1 ..
-$ jf rt bp --project=hello hello-go-build 1
+$ jf rt bce hello-go-build 1
+$ jf rt bag hello-go-build 1
+$ jf rt bp hello-go-build 1
 ```
 
 ### Clean up
 Delete repos if you want
 ```
-$ ../artifactory/delete_repo.sh hello go
+$ jf-quick-teardown -k hello -t go
 ```
 
 ## Automation
-You can use the following script to automate this procedure
+You can use `jf-go-build` command in jfrog-tools to automate this procedure
 ```
-$ ./run.sh hello hello-go-build 1 v1.0.0
+$ jf-go-build -s $SERVER_ID -r hello-go -v v1.0.0 hello-go-build 1
 ```

@@ -1,8 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "virtual",
-  "packageType": "go",
-  "repoLayoutRef" : "go-default",
-  "repositories": ["_PROJECT-go-local", "_PROJECT-go-remote"],
-  "defaultDeploymentRepo": "_PROJECT-go-local"
-}
