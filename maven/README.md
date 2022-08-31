@@ -26,25 +26,14 @@ $ mvn install
 ## Development Flow with JFrog
 
 ### Preparation
-Create repos under a project ("hello" in this case)
+Create repos
 ```
-$ jf c use dev.gcp
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello maven ./artifactory
+$ jf c use $SERVER_ID
+$ jf-quick-setup -k hello -t maven
 ```
-
 Configure JFrog CLI to use the created virtual repo ("hello-maven")
 ```
-$ jf mvnc
-Resolve dependencies from Artifactory? (y/n) [y]? 
-Set Artifactory server ID [repo21]: dev.gcp
-Set resolution repository for release dependencies (press Tab for options): hello-maven
-Set resolution repository for snapshot dependencies (press Tab for options): hello-maven
-Deploy project artifacts to Artifactory? (y/n) [y]? 
-Set Artifactory server ID [repo21]: dev.gcp
-Set repository for release artifacts deployment (press Tab for options): hello-maven
-Set repository for snapshot artifacts deployment (press Tab for options): hello-maven
-Would you like to filter out some of the deployed artifacts? (y/n) [n]? 
-[Info] maven build config successfully created.
+$ jf mvnc --repo-deploy-releases=hello-maven --repo-deploy-snapshots=hello-maven --repo-resolve-releases=hello-maven --repo-resolve-snapshots=hello-maven --server-id-deploy=$SERVER_ID --server-id-resolve=$SERVER_ID
 ```
 
 ### Resolve dependencies
@@ -65,24 +54,24 @@ $ jf mvn exec:java -Dexec.mainClass=dev.tsuyo.hello.HelloWorld
 ### Publish
 Artifact
 ```
-$ jf mvn deploy --project=hello --build-name=hello-maven-build --build-number=1
+$ jf mvn deploy --build-name=hello-maven-build --build-number=1
 ```
 
 Build Info
 ```
-$ jf rt bce --project=hello hello-maven-build 1
-$ jf rt bag --project=hello hello-maven-build 1 ..
-$ jf rt bp --project=hello hello-maven-build 1
+$ jf rt bce hello-maven-build 1
+$ jf rt bag hello-maven-build 1
+$ jf rt bp hello-maven-build 1
 ```
 
 ### Clean Up
 Delete repos if you want
 ```
-$ ../artifactory/delete_repo.sh hello maven
+$ jf-quick-teardown -k hello -t maven
 ```
 
 ## Automation
-You can use the following script to automate this procedure
+You can use `jf-mvn-build` command in jfrog-tools to automate this procedure
 ```
-$ ./run.sh hello hello-maven-build 1
+$ jf-mvn-build -s $SERVER_ID -r hello-maven hello-maven-build 1
 ```
