@@ -1,7 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "local",
-  "packageType": "gradle",
-  "repoLayoutRef" : "maven-2-default",
-  "xrayIndex" : true
-}

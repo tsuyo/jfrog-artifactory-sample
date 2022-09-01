@@ -28,23 +28,12 @@ $ gradle publishToMavenLocal
 ### Preparation
 Create repos under a project ("hello" in this case)
 ```
-$ jf c use dev.gcp
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello gradle ./artifactory
+$ jf c use $SERVER_ID
+$ jf-quick-setup -k hello -t gradle
 ```
 Configure JFrog CLI to use the created virtual repo ("hello-gradle")
 ```
-$ jf gradlec
-Resolve dependencies from Artifactory? (y/n) [y]? 
-Set Artifactory server ID [dev.gcp]: 
-Set repository for dependencies resolution (press Tab for options): hello-gradle
-Deploy project artifacts to Artifactory? (y/n) [y]? 
-Set Artifactory server ID [dev.gcp]: 
-Set repository for artifacts deployment (press Tab for options): hello-gradle
-Deploy Maven descriptors? (y/n) [n]? 
-Deploy Ivy descriptors? (y/n) [n]? 
-Is the Gradle Artifactory Plugin already applied in the build script? (y/n) [n]? 
-Use Gradle wrapper? (y/n) [n]? 
-[Info] gradle build config successfully created.
+$ jf gradlec --repo-deploy=hello-gradle --repo-resolve=hello-gradle --server-id-deploy=$SERVER_ID --server-id-resolve=$SERVER_ID
 ```
 
 ### Resolve dependencies
@@ -65,24 +54,24 @@ $ jf gradle run
 ### Publish
 Artifact
 ```
-$ jf gradle artifactoryPublish --project=hello --build-name=hello-gradle-build --build-number=1
+$ jf gradle artifactoryPublish --build-name=hello-gradle-build --build-number=1
 ```
 
 Build Info
 ```
-$ jf rt bce --project=hello hello-gradle-build 1
-$ jf rt bag --project=hello hello-gradle-build 1 ..
-$ jf rt bp --project=hello hello-gradle-build 1
+$ jf rt bce hello-gradle-build 1
+$ jf rt bag hello-gradle-build 1
+$ jf rt bp hello-gradle-build 1
 ```
 
 ### Clean up
 Delete repos if you want
 ```
-$ ../artifactory/delete_repo.sh hello gradle
+$ jf-quick-teardown -k hello -t gradle
 ```
 
 ## Automation
-You can use the following script to automate this procedure
+You can use `jf-gradle-build` command in jfrog-tools to automate this procedure
 ```
-$ ./run.sh hello hello-gradle-build 1
+$ jf-gradle-build -s $SERVER_ID -r hello-gradle hello-gradle-build 1
 ```
