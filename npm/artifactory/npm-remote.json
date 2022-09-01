@@ -1,9 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "remote",
-  "packageType": "npm",
-  "repoLayoutRef" : "npm-default",
-  "url" : "https://registry.npmjs.org",
-  "vcsGitProvider" : "ARTIFACTORY",
-  "xrayIndex" : true
-}

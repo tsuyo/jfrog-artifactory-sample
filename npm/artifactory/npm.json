@@ -1,8 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "virtual",
-  "packageType": "npm",
-  "repoLayoutRef" : "npm-default",
-  "repositories": ["_PROJECT-npm-local", "_PROJECT-npm-remote"],
-  "defaultDeploymentRepo": "_PROJECT-npm-local"
-}
