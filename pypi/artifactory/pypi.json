@@ -1,8 +1,0 @@
-{
-  "projectKey": "_PROJECT",
-  "rclass" : "virtual",
-  "packageType": "pypi",
-  "repoLayoutRef" : "simple-default",
-  "repositories": ["_PROJECT-pypi-local", "_PROJECT-pypi-remote"],
-  "defaultDeploymentRepo": "_PROJECT-pypi-local"
-}

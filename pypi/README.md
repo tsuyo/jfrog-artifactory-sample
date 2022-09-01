@@ -12,7 +12,7 @@ $ . venv/bin/activate
 
 ### Resolve dependencies
 ```
-(venv) $ python3 -m pip install Babel
+(venv) $ python3 -m pip install -r requirements.txt
 ```
 
 ### Build
@@ -50,28 +50,25 @@ Create an account on [PyPI](https://pypi.org/)
 ## Development Flow with JFrog
 
 ### Preparation
-Create repos under a project ("hello" in this case)
+Create repos
 ```
-$ jf c use dev.gcp
-$ ../artifactory/create_repo.sh -s dev.gcp -u admin -p hello pypi ./artifactory
+$ jf c use $SERVER_ID
+$ jf-quick-setup -k hello -t pypi
 ```
 Configure JFrog CLI to use the created virtual repo ("hello-pypi")
 ```
-$ jf pipc
-Resolve dependencies from Artifactory? (y/n) [y]? 
-Set Artifactory server ID [dev.gcp]: 
-Set repository for dependencies resolution (press Tab for options): hello-pypi
+$ jf pipc --repo-resolve=hello-pypi --server-id-resolve=$SERVER_ID
 ```
 Create a virtual environment
 ```
 $ python3 -m venv venv
 $ . venv/bin/activate
-$ python3 -m pip install --upgrade pip
+(venv) $ python3 -m pip install --upgrade pip
 ```
 
 ### Resolve dependencies
 ```
-(venv) $ jf pip install Babel --project=hello --build-name=hello-pypi-build --build-number=1 --no-cache-dir --force-reinstall
+(venv) $ jf pip install -r requirements.txt --build-name=hello-pypi-build --build-number=1 --no-cache-dir --force-reinstall
 ```
 
 ### Build
@@ -89,17 +86,17 @@ $ python3 -m pip install --upgrade pip
 Artifact
 ```
 (venv) $ python3 -m pip install --upgrade twine
-(venv) $ python3 -m twine upload --repository-url https://platform.dev.gcp.tsuyo.org/artifactory/api/pypi/hello-pypi dist/*
-Uploading distributions to https://platform.dev.gcp.tsuyo.org/artifactory/api/pypi/hello-pypi
+(venv) $ python3 -m twine upload --repository-url $JFROG_PLATFORM_URL/artifactory/api/pypi/hello-pypi dist/*
+...
 Enter your username: admin
 Enter your password: 
 ```
 
 Build Info
 ```
-(venv) $ jf rt bce --project=hello hello-pypi-build 1
-(venv) $ jf rt bag --project=hello hello-pypi-build 1 ..
-(venv) $ jf rt bp --project=hello hello-pypi-build 1
+(venv) $ jf rt bce hello-pypi-build 1
+(venv) $ jf rt bag hello-pypi-build 1
+(venv) $ jf rt bp hello-pypi-build 1
 ```
 
 ### Test
@@ -111,11 +108,11 @@ Build Info
 ### Clean up
 Delete repos if you want
 ```
-$ ../artifactory/delete_repo.sh hello pypi
+$ jf-quick-teardown -k hello -t pypi
 ```
 
 ## Automation
-You can use the following script to automate this procedure
+You can use `jf-pip-build` command in jfrog-tools to automate this procedure
 ```
-$ ./run.sh -s dev.gcp -r pypi hello hello-pypi-build 1
+$ jf-pip-build -s SERVER_ID -r hello-pypi hello-pypi-build 1
 ```
